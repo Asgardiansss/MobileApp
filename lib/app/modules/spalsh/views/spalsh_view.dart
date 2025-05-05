@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:mobile_app/app/constants/colors.dart';
+import 'package:mobile_app/constants/colors.dart';
 
 import '../controllers/spalsh_controller.dart';
 

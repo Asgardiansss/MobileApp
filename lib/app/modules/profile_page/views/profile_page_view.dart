@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile_app/app/constants/colors.dart';
+import 'package:mobile_app/constants/colors.dart';
+import 'package:mobile_app/app/modules/edit_profile_page/views/edit_profile_page_view.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/profile_page_controller.dart';
 
@@ -94,7 +95,7 @@ class ProfilePageView extends GetView<ProfilePageController> {
                     child: GestureDetector(
                       onTap: () {
                         print("Edit Profile Button Pressed");
-                        Get.offAllNamed(Routes.EDIT_PROFILE_PAGE);
+                        Get.to(() => const EditProfilePageView());
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),

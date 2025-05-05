@@ -23,7 +23,7 @@ class SpalshController extends GetxController {
             Get.offAllNamed(Routes.HOME);
       });
     }else{
-      Get.offAllNamed(Routes.LOGIN_PAGE);
+      Get.offAllNamed(Routes.GET_STARTED);
     }
   }
 

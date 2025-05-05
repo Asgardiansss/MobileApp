@@ -9,6 +9,10 @@ abstract class Routes {
   static const PROFILE_PAGE = _Paths.PROFILE_PAGE;
   static const SPALSH = _Paths.SPALSH;
   static const EDIT_PROFILE_PAGE = _Paths.EDIT_PROFILE_PAGE;
+  static const GET_STARTED = _Paths.GET_STARTED;
+  static const STRESS_RELIEF_PAGE = _Paths.STRESS_RELIEF_PAGE;
+  static const DETAIL_STRESS_RELIEF = _Paths.DETAIL_STRESS_RELIEF;
+  static const ANXIETY_PAGE = _Paths.ANXIETY_PAGE;
 }
 
 abstract class _Paths {
@@ -19,4 +23,8 @@ abstract class _Paths {
   static const PROFILE_PAGE = '/profile-page';
   static const SPALSH = '/spalsh';
   static const EDIT_PROFILE_PAGE = '/edit-profile-page';
+  static const GET_STARTED = '/get-started';
+  static const STRESS_RELIEF_PAGE = '/stress-relief-page';
+  static const DETAIL_STRESS_RELIEF = '/detail-stress-relief';
+  static const ANXIETY_PAGE = '/anxiety-page';
 }

@@ -3,9 +3,9 @@ import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../constants/colors.dart';
+import '../../../../constants/colors.dart';
 import '../../../routes/app_pages.dart';
-import '../../../shared/widgets/custom_text_field.dart';
+import '../../../../shared/widgets/custom_text_field.dart';
 import '../controllers/login_page_controller.dart';
 
 class LoginPageView extends GetView<LoginPageController> {
@@ -17,9 +17,10 @@ class LoginPageView extends GetView<LoginPageController> {
       body: Column(
         children: [
           const SizedBox(height: 137),
-          const SizedBox(
+          SizedBox(
             height: 140,
             width: 142,
+            child: Image.asset('assets/logo/logo.png'),
           ),
           const SizedBox(height: 100),
           Expanded(
@@ -139,7 +140,7 @@ class LoginPageView extends GetView<LoginPageController> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Get.toNamed(Routes.PROFILE_PAGE);
+                            Get.toNamed(Routes.REGISTER_PAGE);
                           },
                           child: Text(
                             'daftar',

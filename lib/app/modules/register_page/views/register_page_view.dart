@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../constants/colors.dart';
+import '../../../../constants/colors.dart';
 import '../../../routes/app_pages.dart';
-import '../../../shared/widgets/custom_text_field.dart';
+import '../../../../shared/widgets/custom_text_field.dart';
 import '../controllers/register_page_controller.dart';
 
 class RegisterPageView extends GetView<RegisterPageController> {

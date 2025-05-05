@@ -1,7 +1,13 @@
 import 'package:get/get.dart';
 
+import '../modules/anxiety_page/bindings/anxiety_page_binding.dart';
+import '../modules/anxiety_page/views/anxiety_page_view.dart';
+import '../modules/detail_stress_relief/bindings/detail_stress_relief_binding.dart';
+import '../modules/detail_stress_relief/views/detail_stress_relief_view.dart';
 import '../modules/edit_profile_page/bindings/edit_profile_page_binding.dart';
 import '../modules/edit_profile_page/views/edit_profile_page_view.dart';
+import '../modules/get_started/bindings/get_started_binding.dart';
+import '../modules/get_started/views/get_started_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login_page/bindings/login_page_binding.dart';
@@ -12,13 +18,15 @@ import '../modules/register_page/bindings/register_page_binding.dart';
 import '../modules/register_page/views/register_page_view.dart';
 import '../modules/spalsh/bindings/spalsh_binding.dart';
 import '../modules/spalsh/views/spalsh_view.dart';
+import '../modules/stress_relief_page/bindings/stress_relief_page_binding.dart';
+import '../modules/stress_relief_page/views/stress_relief_page_view.dart';
 
 part 'app_routes.dart';
 
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.PROFILE_PAGE;
+  static const INITIAL = Routes.SPALSH;
 
   static final routes = [
     GetPage(
@@ -50,6 +58,26 @@ class AppPages {
       name: _Paths.EDIT_PROFILE_PAGE,
       page: () => const EditProfilePageView(),
       binding: EditProfilePageBinding(),
+    ),
+    GetPage(
+      name: _Paths.GET_STARTED,
+      page: () => const GetStartedView(),
+      binding: GetStartedBinding(),
+    ),
+    GetPage(
+      name: _Paths.STRESS_RELIEF_PAGE,
+      page: () => const StressReliefPageView(),
+      binding: StressReliefPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAIL_STRESS_RELIEF,
+      page: () => const DetailStressReliefView(),
+      binding: DetailStressReliefBinding(),
+    ),
+    GetPage(
+      name: _Paths.ANXIETY_PAGE,
+      page: () => const AnxietyPageView(),
+      binding: AnxietyPageBinding(),
     ),
   ];
 }

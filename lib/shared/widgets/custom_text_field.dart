@@ -6,15 +6,15 @@ import '../../constants/colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hintText;
-  // final TextEditingController controller;
+  final TextEditingController? controller;
   final TextInputType keyboardType;
   final bool obscureText;
-  final String? leadingIconPath; // Path to the asset icon
+  final String? leadingIconPath;
 
   CustomTextField({
     Key? key,
     required this.hintText,
-    // required this.controller,
+    this.controller,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.leadingIconPath,
@@ -32,13 +32,13 @@ class CustomTextField extends StatelessWidget {
             color: Color(0xFF575757),
             offset: Offset(-2, -2),
             blurRadius: 1,
-            inset: true
+            inset: true,
           ),
           BoxShadow(
             color: Color(0xFF000000),
             offset: Offset(2, 2),
             blurRadius: 1,
-            inset: true
+            inset: true,
           )
         ],
       ),
@@ -56,7 +56,7 @@ class CustomTextField extends StatelessWidget {
             ),
           Expanded(
             child: TextField(
-              // controller: controller,
+              controller: controller,
               keyboardType: keyboardType,
               obscureText: obscureText,
               style: GoogleFonts.dmSans(
@@ -71,9 +71,7 @@ class CustomTextField extends StatelessWidget {
                   fontSize: 14,
                   fontWeight: FontWeight.normal,
                 ),
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 14.0
-                ),
+                contentPadding: const EdgeInsets.symmetric(vertical: 14.0),
               ),
             ),
           ),

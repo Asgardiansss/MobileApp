@@ -10,8 +10,11 @@ import '../controllers/login_page_controller.dart';
 
 class LoginPageView extends GetView<LoginPageController> {
   const LoginPageView({super.key});
+
   @override
   Widget build(BuildContext context) {
+    Get.put(LoginPageController());
+
     return Scaffold(
       backgroundColor: AppColorsDark.primary,
       body: Column(
@@ -36,13 +39,11 @@ class LoginPageView extends GetView<LoginPageController> {
                     color: Color(0xFF575757),
                     offset: Offset(-2, -2),
                     blurRadius: 1,
-                    // inset: true
                   ),
                   BoxShadow(
                     color: Color(0xFF000000),
                     offset: Offset(2, 2),
                     blurRadius: 1,
-                    // inset: true
                   )
                 ],
               ),
@@ -51,40 +52,24 @@ class LoginPageView extends GetView<LoginPageController> {
                 child: ListView(
                   children: [
                     Padding(
-                        padding: const EdgeInsets.only(
-                    top: 40, right: 5, left: 5, bottom: 0),
+                      padding: const EdgeInsets.only(top: 40, right: 5, left: 5, bottom: 0),
                       child: CustomTextField(
                         key: const Key("email"),
                         hintText: 'Email',
-                        // controller: null,
                         leadingIconPath: 'assets/icons/mail.png',
+                        controller: controller.emailController,
                       ),
-
                     ),
                     Padding(
-                        padding: const EdgeInsets.only(
-                    top: 20, right: 5, left: 5, bottom: 0),
+                      padding: const EdgeInsets.only(top: 20, right: 5, left: 5, bottom: 0),
                       child: CustomTextField(
                         key: const Key("lock"),
                         hintText: 'Password',
-                        // controller: null,
                         leadingIconPath: 'assets/icons/lock.png',
+                        controller: controller.passwordController,
+                        obscureText: true,
                       ),
-
                     ),
-                    // const SizedBox(height: 20),
-
-                    // const SizedBox(height: 20),
-                    // TextField(
-                    //   obscureText: true,
-                    //   decoration: InputDecoration(
-                    //     hintText: 'Password',
-                    //     prefixIcon: const Icon(Icons.lock),
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(12),
-                    //     ),
-                    //   ),
-                    // ),
                     const SizedBox(height: 50),
                     SizedBox(
                       width: 360,
@@ -92,9 +77,9 @@ class LoginPageView extends GetView<LoginPageController> {
                       child: InkWell(
                         key: const Key("btn_login"),
                         onTap: () {
-                          Get.offAllNamed(Routes.HOME);
+                          controller.login();
                         },
-                        child: Container(
+                        child: Obx(() => Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: AppColorsDark.primary,
@@ -103,18 +88,18 @@ class LoginPageView extends GetView<LoginPageController> {
                                 color: Color(0xFF575757),
                                 offset: Offset(-2, -2),
                                 blurRadius: 1,
-                                // inset: true
                               ),
                               BoxShadow(
                                 color: Color(0xFF000000),
                                 offset: Offset(2, 2),
                                 blurRadius: 1,
-                                // inset: true
                               )
                             ],
                           ),
                           child: Center(
-                            child: Text(
+                            child: controller.isLoading.value
+                                ? const CircularProgressIndicator()
+                                : Text(
                               "Sign In",
                               style: GoogleFonts.dmSans(
                                 fontSize: 14,
@@ -123,10 +108,9 @@ class LoginPageView extends GetView<LoginPageController> {
                               ),
                             ),
                           ),
-                        ),
+                        )),
                       ),
                     ),
-
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -153,20 +137,11 @@ class LoginPageView extends GetView<LoginPageController> {
                       ],
                     ),
                     const SizedBox(height: 52),
-                    Center(
-                      child: Text(
-                        '',
-                        style: GoogleFonts.dmSans(
-                          fontSize: 12,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

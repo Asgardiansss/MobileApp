@@ -1,16 +1,30 @@
-# mobile_app
+# Yoga Pose Detection App
 
-A new Flutter project.
+Aplikasi Deteksi Gerakan Yoga untuk Relaksasi dan Meditasi berbasis Computer Vision.
 
-## Getting Started
+## 📱 Deskripsi
 
-This project is a starting point for a Flutter application.
+Aplikasi ini membantu pengguna melakukan gerakan yoga relaksasi dengan benar di rumah. Menggunakan teknologi **Computer Vision**, aplikasi memberikan feedback otomatis atas pose tubuh pengguna, sehingga latihan menjadi lebih efektif dan bermanfaat untuk kesehatan mental.
 
-A few resources to get you started if this is your first Flutter project:
+## ✨ Fitur Utama
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Deteksi pose yoga secara real-time menggunakan kamera ponsel
+- Panduan langkah demi langkah untuk berbagai pose yoga
+- Informasi manfaat dari setiap gerakan yoga
+- Rekam progress dan sesi latihan pengguna
+- Desain antarmuka yang ramah dan intuitif
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📸 Tampilan Aplikasi
+
+![Screenshot](assets/mockup/HomeScreen.png)  
+![Screenshot](assets/mockup/OnboardingScreen.png)
+
+## 🚀 Instalasi
+
+Jalankan perintah berikut di terminal:
+
+```bash
+git clone https://github.com/username/yoga-pose-detection-app.git
+cd yoga-pose-detection-app && \
+flutter pub get && \
+flutter run

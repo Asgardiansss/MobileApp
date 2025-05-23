@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,7 +36,7 @@ class ProfilePageView extends GetView<ProfilePageController> {
                   // Card pertama
                   Container(
                     width: double.infinity,
-                    height: 110,
+                    height: 160,
                     margin: const EdgeInsets.only(top: 60),
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Container(
@@ -129,8 +130,10 @@ class ProfilePageView extends GetView<ProfilePageController> {
                 ],
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 60),
 
+              // card 2
+              // Card 2 dengan chart
               Container(
                 width: double.infinity,
                 height: 160,
@@ -152,60 +155,124 @@ class ProfilePageView extends GetView<ProfilePageController> {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Feature Card 1',
+                        'Lencana',
                         style: GoogleFonts.dmSans(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: AppColorsDark.teksPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            // Info Kalori & Waktu
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Calories', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                                Text('160,5kcal', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                                SizedBox(height: 12),
+                                Text('Time', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                                Text('1:03:03', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                            const SizedBox(width: 16),
+                            // Grafik Bar
+                            Expanded(
+                              child: BarChart(
+                                BarChartData(
+                                  barTouchData: BarTouchData(enabled: false),
+                                  titlesData: FlTitlesData(
+                                    bottomTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        getTitlesWidget: (value, _) {
+                                          const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                                          return Text(days[value.toInt()], style: TextStyle(color: Colors.white, fontSize: 10));
+                                        },
+                                      ),
+                                    ),
+                                    leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                  ),
+                                  gridData: FlGridData(show: false),
+                                  borderData: FlBorderData(show: false),
+                                  barGroups: List.generate(7, (index) {
+                                    final heights = [4.0, 5.5, 5.0, 6.0, 6.5, 4.5, 5.2];
+                                    return BarChartGroupData(
+                                      x: index,
+                                      barRods: [
+                                        BarChartRodData(
+                                          toY: heights[index],
+                                          color: Colors.greenAccent,
+                                          width: 8,
+                                          borderRadius: BorderRadius.circular(4),
+                                          backDrawRodData: BackgroundBarChartRodData(
+                                            show: true,
+                                            toY: 7,
+                                            color: Colors.white24,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
+
 
               const SizedBox(height: 24),
 
-              Container(
-                width: double.infinity,
-                height: 160,
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: AppColorsDark.primary,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0xFF575757),
-                      offset: Offset(-2, -2),
-                      blurRadius: 1,
-                    ),
-                    BoxShadow(
-                      color: Color(0xFF000000),
-                      offset: Offset(2, 2),
-                      blurRadius: 1,
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Feature Card 2',
-                        style: GoogleFonts.dmSans(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColorsDark.teksPrimary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // Container(
+              //   width: double.infinity,
+              //   height: 160,
+              //   margin: const EdgeInsets.symmetric(horizontal: 16),
+              //   decoration: BoxDecoration(
+              //     color: AppColorsDark.primary,
+              //     borderRadius: BorderRadius.circular(16),
+              //     boxShadow: const [
+              //       BoxShadow(
+              //         color: Color(0xFF575757),
+              //         offset: Offset(-2, -2),
+              //         blurRadius: 1,
+              //       ),
+              //       BoxShadow(
+              //         color: Color(0xFF000000),
+              //         offset: Offset(2, 2),
+              //         blurRadius: 1,
+              //       ),
+              //     ],
+              //   ),
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(24),
+              //     child: Column(
+              //       children: [
+              //         Text(
+              //           'Feature Card 2',
+              //           style: GoogleFonts.dmSans(
+              //             fontSize: 18,
+              //             fontWeight: FontWeight.bold,
+              //             color: AppColorsDark.teksPrimary,
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

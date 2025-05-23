@@ -34,21 +34,21 @@ class HomeView extends GetView<HomeController> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Hello, Welcome',
                             style: TextStyle(color: Colors.white70),
                           ),
-                          Text(
-                            'Loki Laufeyson',
-                            style: TextStyle(
+                          Obx(() => Text(
+                            controller.username.value,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
-                          ),
+                          )),
                         ],
                       )
                     ],

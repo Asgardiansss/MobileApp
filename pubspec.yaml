@@ -39,6 +39,8 @@ dependencies:
   get_storage: ^2.1.1
   google_fonts: ^6.2.1
   flutter_inset_box_shadow: ^1.0.8
+  fl_chart: ^0.64.0
+  flutter_secure_storage: ^9.2.4
 
 dev_dependencies:
   flutter_test:

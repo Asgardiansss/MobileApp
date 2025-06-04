@@ -15,8 +15,6 @@ Aplikasi ini membantu pengguna melakukan gerakan yoga relaksasi dengan benar di 
 - Desain antarmuka yang ramah dan intuitif
 
 ## 📸 Tampilan Aplikasi
-
-![Screenshot](assets/mockup/HomeScreen.png)  
 ![Screenshot](assets/mockup/OnboardingScreen.png)
 
 ## 🚀 Instalasi

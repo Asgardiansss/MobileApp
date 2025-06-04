@@ -1,23 +1,19 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
 class ProfilePageController extends GetxController {
-  //TODO: Implement ProfilePageController
+  final _storage = FlutterSecureStorage();
+  final username = ''.obs;
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
+    loadUsername();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  void loadUsername() async {
+    final storedUsername = await _storage.read(key: 'username');
+    username.value = storedUsername ?? 'Guest';
   }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }
+

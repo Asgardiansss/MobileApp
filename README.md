@@ -22,7 +22,7 @@ Aplikasi ini membantu pengguna melakukan gerakan yoga relaksasi dengan benar di 
 Jalankan perintah berikut di terminal:
 
 ```bash
-git clone https://github.com/username/yoga-pose-detection-app.git
-cd yoga-pose-detection-app && \
-flutter pub get && \
+git clone https://github.com/Asgardiansss/MobileApp.git
+cd MobileApp
+flutter pub get
 flutter run

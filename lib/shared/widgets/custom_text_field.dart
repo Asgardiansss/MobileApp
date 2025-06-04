@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final bool obscureText;
   final String? leadingIconPath;
+  final Widget? suffixIcon; // Tambah parameter suffixIcon
 
   CustomTextField({
     Key? key,
@@ -18,10 +19,12 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.leadingIconPath,
+    this.suffixIcon, // Tambah ke konstruktor
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       height: 55,
       decoration: BoxDecoration(
@@ -72,6 +75,7 @@ class CustomTextField extends StatelessWidget {
                   fontWeight: FontWeight.normal,
                 ),
                 contentPadding: const EdgeInsets.symmetric(vertical: 14.0),
+                suffixIcon: suffixIcon, // Tambah suffixIcon ke TextField
               ),
             ),
           ),

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
+import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,16 +14,22 @@ class RegisterPageView extends GetView<RegisterPageController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(RegisterPageController());
+    final obscurePassword = true.obs;
 
     return Scaffold(
       backgroundColor: AppColorsDark.primary,
-      body: Column(
-        children: [
-          const SizedBox(height: 137),
-          const SizedBox(height: 140, width: 142),
-          const SizedBox(height: 100),
-          Expanded(
-            child: Container(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 137),
+            SizedBox(
+              height: 140,
+              width: 142,
+              child: Image.asset('assets/logo/logo.png'),
+            ),
+            const SizedBox(height: 100),
+            Container(
+              width: double.infinity,
               decoration: const BoxDecoration(
                 color: AppColorsDark.primary,
                 borderRadius: BorderRadius.only(
@@ -44,7 +51,7 @@ class RegisterPageView extends GetView<RegisterPageController> {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: ListView(
+                child: Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 40, right: 5, left: 5),
@@ -66,13 +73,25 @@ class RegisterPageView extends GetView<RegisterPageController> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 20, right: 5, left: 5),
-                      child: CustomTextField(
+                      child: Obx(() => CustomTextField(
                         key: const Key("password"),
                         hintText: 'Password',
                         controller: controller.passwordController,
-                        obscureText: true,
+                        obscureText: obscurePassword.value,
                         leadingIconPath: 'assets/icons/lock.png',
-                      ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            obscurePassword.value
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            color: Colors.grey,
+                            size: 20,
+                          ),
+                          onPressed: () {
+                            obscurePassword.toggle();
+                          },
+                        ),
+                      )),
                     ),
                     const SizedBox(height: 50),
                     Obx(() => SizedBox(
@@ -121,7 +140,10 @@ class RegisterPageView extends GetView<RegisterPageController> {
                       children: [
                         Text(
                           'Sudah punya akun?',
-                          style: GoogleFonts.dmSans(fontSize: 12, color: Colors.white),
+                          style: GoogleFonts.dmSans(
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
                         ),
                         TextButton(
                           onPressed: () {
@@ -137,13 +159,13 @@ class RegisterPageView extends GetView<RegisterPageController> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 52),
+                    const SizedBox(height: 122),
                   ],
                 ),
               ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

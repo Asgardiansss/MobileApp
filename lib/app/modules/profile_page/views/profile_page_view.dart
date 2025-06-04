@@ -12,6 +12,8 @@ class ProfilePageView extends GetView<ProfilePageController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(ProfilePageController());
+    
     return Scaffold(
       backgroundColor: AppColorsDark.primary,
       body: Center(
@@ -60,20 +62,19 @@ class ProfilePageView extends GetView<ProfilePageController> {
                         padding: const EdgeInsets.only(top: 50.0, bottom: 16.0),
                         child: Column(
                           children: [
-                            Text(
-                              'LokiLaufeyson',
-                              style: GoogleFonts.dmSans(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: AppColorsDark.teksPrimary,
+                            Obx(() => Text(
+                              controller.username.value,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
-                            ),
+                            )),
                           ],
                         ),
                       ),
                     ),
                   ),
-
                   const Positioned(
                     top: 0,
                     left: 0,

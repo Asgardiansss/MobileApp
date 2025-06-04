@@ -50,10 +50,31 @@ class HomeView extends GetView<HomeController> {
                             ),
                           )),
                         ],
-                      )
+                      ),
+                      const SizedBox(width: 150),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => const StressReliefPageView());
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Colors.black26,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.stacked_line_chart_sharp,
+                            color: Colors.white,
+                            size: 25,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
+
+
                 const SizedBox(height: 54),
 
                 const Text('Category',

@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/anxiety_page/bindings/anxiety_page_binding.dart';
 import '../modules/anxiety_page/views/anxiety_page_view.dart';
+import '../modules/berita/bindings/berita_binding.dart';
+import '../modules/berita/views/berita_view.dart';
 import '../modules/detail_stress_relief/bindings/detail_stress_relief_binding.dart';
 import '../modules/detail_stress_relief/views/detail_stress_relief_view.dart';
 import '../modules/edit_profile_page/bindings/edit_profile_page_binding.dart';
@@ -20,6 +22,8 @@ import '../modules/spalsh/bindings/spalsh_binding.dart';
 import '../modules/spalsh/views/spalsh_view.dart';
 import '../modules/stress_relief_page/bindings/stress_relief_page_binding.dart';
 import '../modules/stress_relief_page/views/stress_relief_page_view.dart';
+import '../modules/visualisasi/bindings/visualisasi_binding.dart';
+import '../modules/visualisasi/views/visualisasi_view.dart';
 
 part 'app_routes.dart';
 
@@ -31,7 +35,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: _Paths.HOME,
-      page: () => const HomeView(),
+      page: () => HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
@@ -78,6 +82,16 @@ class AppPages {
       name: _Paths.ANXIETY_PAGE,
       page: () => const AnxietyPageView(),
       binding: AnxietyPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.BERITA,
+      page: () => const BeritaView(),
+      binding: BeritaBinding(),
+    ),
+    GetPage(
+      name: _Paths.VISUALISASI,
+      page: () => const VisualisasiView(),
+      binding: VisualisasiBinding(),
     ),
   ];
 }

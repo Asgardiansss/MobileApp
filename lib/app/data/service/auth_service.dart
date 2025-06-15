@@ -28,9 +28,7 @@ class AuthService {
   }) async {
     final response = await http.post(
       Uri.parse('$baseUrl/register'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'username': username,
         'email': email,
@@ -38,16 +36,12 @@ class AuthService {
       }),
     );
 
-    print('RESPONSE STATUS: ${response.statusCode}');
-    print('RESPONSE BODY: ${response.body}');
-
     final data = jsonDecode(response.body);
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
+    if (response.statusCode == 201) {
       return data['message'] ?? 'Registration successful';
     } else {
       throw Exception(data['message'] ?? 'Register failed');
     }
   }
-
 }

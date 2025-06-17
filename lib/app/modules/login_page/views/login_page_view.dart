@@ -15,7 +15,6 @@ class LoginPageView extends GetView<LoginPageController> {
   Widget build(BuildContext context) {
     Get.put(LoginPageController());
 
-    // Variabel untuk toggle obscureText
     final obscurePassword = true.obs;
 
     return Scaffold(
@@ -77,11 +76,11 @@ class LoginPageView extends GetView<LoginPageController> {
                             obscurePassword.value
                                 ? Icons.visibility_off_outlined
                                 : Icons.visibility_outlined,
-                            color: Colors.grey, // Match den
-                            size: 20,// gan leading icon
+                            color: Colors.grey,
+                            size: 20,
                           ),
                           onPressed: () {
-                            obscurePassword.toggle(); // Toggle hide/show password
+                            obscurePassword.toggle();
                           },
                         ),
                       )),
@@ -125,6 +124,54 @@ class LoginPageView extends GetView<LoginPageController> {
                             ),
                           ),
                         )),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: 360,
+                      height: 55,
+                      child: InkWell(
+                        key: const Key("btn_google_login"),
+                        onTap: () {
+                          controller.signInWithGoogle();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColorsDark.primary,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(0xFF575757),
+                                offset: Offset(-2, -2),
+                                blurRadius: 1,
+                              ),
+                              BoxShadow(
+                                color: Color(0xFF000000),
+                                offset: Offset(2, 2),
+                                blurRadius: 1,
+                              )
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/icons/ic_google.png',
+                                width: 24,
+                                height: 24,
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                'Sign In with Google',
+                                style: GoogleFonts.dmSans(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 20),

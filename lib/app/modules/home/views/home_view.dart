@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../constants/colors.dart';
 import '../../anxiety_page/views/anxiety_page_view.dart';
+import '../../berita/controllers/berita_controller.dart';
 import '../../profile_page/views/profile_page_view.dart';
 import '../../stress_relief_page/views/stress_relief_page_view.dart';
+import '../../visualisasi/views/visualisasi_view.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
-  const HomeView({super.key});
+  HomeView({super.key});
+
+  final beritaController = Get.put(BeritaController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +59,7 @@ class HomeView extends GetView<HomeController> {
                       const SizedBox(width: 150),
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => const StressReliefPageView());
+                          Get.to(() => const VisualisasiView());
                         },
                         child: Container(
                           width: 40,
@@ -261,103 +266,109 @@ class HomeView extends GetView<HomeController> {
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
-                        fontWeight: FontWeight.bold
-                    )
-                ),
+                        fontWeight: FontWeight.bold)),
                 const SizedBox(height: 20),
-                SizedBox(
-                  height: 300,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      final isFirst = index == 0;
+                Obx(() {
+                  if (beritaController.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                      return Container(
-                        margin: EdgeInsets.only(
-                          left: isFirst ? 6 : 0,
-                          right: 16,
-                          top: 8,
-                          bottom: 8,
-                        ),
-                        width: 200,
-                        decoration: BoxDecoration(
-                          color: AppColorsDark.primary,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color(0xFF575757),
-                              offset: Offset(-2, -2),
-                              blurRadius: 4,
-                            ),
-                            BoxShadow(
-                              color: Color(0xFF000000),
-                              offset: Offset(2, 2),
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(16),
-                                topRight: Radius.circular(16),
+                  if (beritaController.articles.isEmpty) {
+                    return const Text('No articles found', style: TextStyle(color: Colors.white70));
+                  }
+
+                  return SizedBox(
+                    height: 300,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: beritaController.articles.length,
+                      itemBuilder: (context, index) {
+                        final article = beritaController.articles[index];
+                        final isFirst = index == 0;
+
+                        return Container(
+                          margin: EdgeInsets.only(
+                            left: isFirst ? 6 : 0,
+                            right: 16,
+                            top: 8,
+                            bottom: 8,
+                          ),
+                          width: 200,
+                          decoration: BoxDecoration(
+                            color: AppColorsDark.primary,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(0xFF575757),
+                                offset: Offset(-2, -2),
+                                blurRadius: 4,
                               ),
-                              child: Image.asset(
-                                index == 0
-                                    ? 'assets/images/im_blog.png'
-                                    : index == 1
-                                    ? 'assets/images/im_blog.png'
-                                    : 'assets/images/im_blog.png',
-                                height: 140,
-                                width: 200,
-                                fit: BoxFit.cover,
+                              BoxShadow(
+                                color: Color(0xFF000000),
+                                offset: Offset(2, 2),
+                                blurRadius: 4,
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    index == 0
-                                        ? 'Mengenal Gaya Yoga Terbaru: Vinyasa Flow dengan Sentuhan Mindfulness'
-                                        : index == 1
-                                        ? '5 Alasan Kenapa Yoga Hatha Bisa Menjadi Pilihan Terbaik Untuk Pemula'
-                                        : 'Yoga untuk Stres: 3 Pose Efektif Mengatasi Kecemasan',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(16),
+                                  topRight: Radius.circular(16),
+                                ),
+                                child: Image.network(
+                                  article.gambar,
+                                  height: 140,
+                                  width: 200,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      height: 140,
+                                      width: 200,
+                                      color: Colors.grey,
+                                      child: const Icon(Icons.broken_image, size: 50),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      article.judul,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                      ),
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Text(
-                                    index == 0
-                                        ? 'Yoga telah mengalami banyak perubahan sepanjang sejarahnya...'
-                                        : index == 1
-                                        ? 'Bagi pemula yang baru mulai mengenal yoga, memilih gaya yoga...'
-                                        : 'Stres dan kecemasan adalah bagian dari kehidupan modern...',
-                                    style: const TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 10,
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      article.isi,
+                                      style: const TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 10,
+                                      ),
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }),
+
               ],
             ),
           ),

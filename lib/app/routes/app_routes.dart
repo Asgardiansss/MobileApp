@@ -13,6 +13,8 @@ abstract class Routes {
   static const STRESS_RELIEF_PAGE = _Paths.STRESS_RELIEF_PAGE;
   static const DETAIL_STRESS_RELIEF = _Paths.DETAIL_STRESS_RELIEF;
   static const ANXIETY_PAGE = _Paths.ANXIETY_PAGE;
+  static const BERITA = _Paths.BERITA;
+  static const VISUALISASI = _Paths.VISUALISASI;
 }
 
 abstract class _Paths {
@@ -27,4 +29,6 @@ abstract class _Paths {
   static const STRESS_RELIEF_PAGE = '/stress-relief-page';
   static const DETAIL_STRESS_RELIEF = '/detail-stress-relief';
   static const ANXIETY_PAGE = '/anxiety-page';
+  static const BERITA = '/berita';
+  static const VISUALISASI = '/visualisasi';
 }

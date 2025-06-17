@@ -1,18 +1,19 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import '../../../data/service/session_service.dart';
 
 class HomeController extends GetxController {
-  final _storage = FlutterSecureStorage();
-  final username = ''.obs;
+  var username = ''.obs;
+  var imageUrl = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    loadUsername();
+    loadUserProfile();
   }
 
-  void loadUsername() async {
-    final storedUsername = await _storage.read(key: 'username');
-    username.value = storedUsername ?? 'Guest';
+  Future<void> loadUserProfile() async {
+    final user = await SessionService().getUser();
+    username.value = user?['username'] ?? 'Guest';
+    imageUrl.value = user?['image'] ?? '';
   }
 }

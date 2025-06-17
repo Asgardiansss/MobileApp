@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_app/constants/colors.dart';
-import 'package:mobile_app/app/modules/edit_profile_page/views/edit_profile_page_view.dart';
-import '../../../routes/app_pages.dart';
+import 'package:mobile_app/app/routes/app_pages.dart';
 import '../controllers/profile_page_controller.dart';
 
 class ProfilePageView extends GetView<ProfilePageController> {
@@ -16,8 +15,14 @@ class ProfilePageView extends GetView<ProfilePageController> {
 
     return Scaffold(
       backgroundColor: AppColorsDark.primary,
-      body: Center(
-        child: SafeArea(
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(color: Colors.white),
+          );
+        }
+
+        return SafeArea(
           child: Column(
             children: [
               const SizedBox(height: 20),
@@ -27,7 +32,7 @@ class ProfilePageView extends GetView<ProfilePageController> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.back(); 
+                        Get.back();
                       },
                       child: const Icon(
                         Icons.arrow_back,
@@ -51,7 +56,6 @@ class ProfilePageView extends GetView<ProfilePageController> {
               Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  // Card pertama
                   Container(
                     width: double.infinity,
                     height: 160,
@@ -78,30 +82,46 @@ class ProfilePageView extends GetView<ProfilePageController> {
                         padding: const EdgeInsets.only(top: 50.0, bottom: 16.0),
                         child: Column(
                           children: [
-                            Obx(() => Text(
+                            Text(
                               controller.username.value,
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                               ),
-                            )),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              controller.email.value,
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                  const Positioned(
+                  Positioned(
                     top: 0,
                     left: 0,
                     right: 0,
                     child: Center(
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.white,
-                        child: CircleAvatar(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        child: controller.imageUrl.value.isEmpty
+                            ? const CircleAvatar(
+                          key: ValueKey("empty"),
                           radius: 50,
-                          backgroundImage: AssetImage('assets/images/avatar.png'),
+                          backgroundColor: Colors.grey,
+                          child: Icon(Icons.person, color: Colors.white, size: 40),
+                        )
+                            : CircleAvatar(
+                          key: ValueKey("loaded"),
+                          radius: 50,
+                          backgroundImage: NetworkImage(controller.imageUrl.value),
                         ),
                       ),
                     ),
@@ -111,12 +131,10 @@ class ProfilePageView extends GetView<ProfilePageController> {
                     right: 30,
                     child: GestureDetector(
                       onTap: () {
-                        print("Edit Profile Button Pressed");
-                        Get.to(() => const EditProfilePageView());
+                        Get.toNamed(Routes.EDIT_PROFILE_PAGE);
                       },
                       child: Container(
-                        padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                         decoration: BoxDecoration(
                           color: AppColorsDark.primary,
                           borderRadius: BorderRadius.circular(8),
@@ -149,7 +167,7 @@ class ProfilePageView extends GetView<ProfilePageController> {
 
               const SizedBox(height: 60),
 
-              // Card 2 dengan grafik bar
+              // Card Grafik Bar
               Container(
                 width: double.infinity,
                 height: 160,
@@ -187,21 +205,18 @@ class ProfilePageView extends GetView<ProfilePageController> {
                       Expanded(
                         child: Row(
                           children: [
-                            // Info Kalori & Waktu
                             const Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text('Calories',
-                                    style: TextStyle(
-                                        color: Colors.white70, fontSize: 12)),
+                                    style: TextStyle(color: Colors.white70, fontSize: 12)),
                                 Text('160,5kcal',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold)),
                                 SizedBox(height: 12),
                                 Text('Time',
-                                    style: TextStyle(
-                                        color: Colors.white70, fontSize: 12)),
+                                    style: TextStyle(color: Colors.white70, fontSize: 12)),
                                 Text('1:03:03',
                                     style: TextStyle(
                                         color: Colors.white,
@@ -209,7 +224,6 @@ class ProfilePageView extends GetView<ProfilePageController> {
                               ],
                             ),
                             const SizedBox(width: 16),
-                            // Grafik Bar
                             Expanded(
                               child: BarChart(
                                 BarChartData(
@@ -220,45 +234,24 @@ class ProfilePageView extends GetView<ProfilePageController> {
                                         showTitles: true,
                                         getTitlesWidget: (value, _) {
                                           const days = [
-                                            'Mon',
-                                            'Tue',
-                                            'Wed',
-                                            'Thu',
-                                            'Fri',
-                                            'Sat',
-                                            'Sun'
+                                            'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'
                                           ];
                                           return Text(
                                             days[value.toInt()],
                                             style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 10),
+                                                color: Colors.white, fontSize: 10),
                                           );
                                         },
                                       ),
                                     ),
-                                    leftTitles: AxisTitles(
-                                        sideTitles:
-                                        SideTitles(showTitles: false)),
-                                    topTitles: AxisTitles(
-                                        sideTitles:
-                                        SideTitles(showTitles: false)),
-                                    rightTitles: AxisTitles(
-                                        sideTitles:
-                                        SideTitles(showTitles: false)),
+                                    leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
                                   ),
                                   gridData: FlGridData(show: false),
                                   borderData: FlBorderData(show: false),
                                   barGroups: List.generate(7, (index) {
-                                    final heights = [
-                                      4.0,
-                                      5.5,
-                                      5.0,
-                                      6.0,
-                                      6.5,
-                                      4.5,
-                                      5.2
-                                    ];
+                                    final heights = [4.0, 5.5, 5.0, 6.0, 6.5, 4.5, 5.2];
                                     return BarChartGroupData(
                                       x: index,
                                       barRods: [
@@ -266,10 +259,8 @@ class ProfilePageView extends GetView<ProfilePageController> {
                                           toY: heights[index],
                                           color: Colors.greenAccent,
                                           width: 8,
-                                          borderRadius:
-                                          BorderRadius.circular(4),
-                                          backDrawRodData:
-                                          BackgroundBarChartRodData(
+                                          borderRadius: BorderRadius.circular(4),
+                                          backDrawRodData: BackgroundBarChartRodData(
                                             show: true,
                                             toY: 7,
                                             color: Colors.white24,
@@ -292,8 +283,8 @@ class ProfilePageView extends GetView<ProfilePageController> {
               const SizedBox(height: 24),
             ],
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

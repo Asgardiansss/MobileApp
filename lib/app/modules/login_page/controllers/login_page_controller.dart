@@ -14,6 +14,7 @@ class LoginPageController extends GetxController {
   final _authService = AuthService();
   final _storage = FlutterSecureStorage();
 
+  // Login dengan email/password backend
   void login() async {
     isLoading.value = true;
     try {
@@ -21,9 +22,11 @@ class LoginPageController extends GetxController {
         emailController.text.trim(),
         passwordController.text.trim(),
       );
+      print('Login response accessToken: ${response.accessToken}');
+      print('Login response username: ${response.user.username}');
 
-      await _storage.write(key: 'token', value: response.accessToken);
-      await _storage.write(key: 'username', value: response.user.username);
+      await _storage.write(key: 'token', value: response.accessToken ?? '');
+      await _storage.write(key: 'username', value: response.user.username ?? '');
 
       Get.snackbar("Success", "Welcome ${response.user.username}");
       Get.offAllNamed(Routes.HOME);
@@ -34,43 +37,31 @@ class LoginPageController extends GetxController {
     }
   }
 
+
+  // Google Sign-In via Firebase, terpisah dari backend
   Future<void> signInWithGoogle() async {
     try {
-      final GoogleSignIn googleSignIn = GoogleSignIn(
-        scopes: ['email', 'profile'],
-      );
-
-      await googleSignIn.signOut();
-
+      final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
       if (googleUser == null) {
-        print("Login Google dibatalkan pengguna");
         Get.snackbar("Login Dibatalkan", "Pengguna membatalkan login Google.");
         return;
       }
 
-      final GoogleSignInAuthentication googleAuth =
-      await googleUser.authentication;
-
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      // Login ke Firebase
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithCredential(credential);
-      User? user = userCredential.user;
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
-      if (user != null) {
-        print("Login sukses: ${user.displayName} (${user.email})");
-
+      if (userCredential.user != null) {
         Get.snackbar("Sukses", "Login Google berhasil");
-        Get.offAllNamed('/home');
+        Get.offAllNamed(Routes.HOME);
       }
     } catch (e) {
-      print("Error saat login Google: $e");
       Get.snackbar("Error", "Terjadi kesalahan saat login: $e");
     }
   }

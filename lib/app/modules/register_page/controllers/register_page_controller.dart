@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-
 import '../../../data/service/auth_service.dart';
 import '../../../routes/app_pages.dart';
 
@@ -12,7 +10,6 @@ class RegisterPageController extends GetxController {
   final isLoading = false.obs;
 
   final _authService = AuthService();
-  final _storage = FlutterSecureStorage();
 
   void register() async {
     if (usernameController.text.isEmpty || emailController.text.isEmpty || passwordController.text.isEmpty) {
@@ -29,7 +26,12 @@ class RegisterPageController extends GetxController {
         password: passwordController.text.trim(),
       );
 
-      Get.snackbar("Sukses", message);
+      Get.snackbar(
+        "Registrasi Berhasil",
+        "$message\nSilakan cek email dan klik link verifikasi sebelum login.",
+      );
+
+      // Setelah register, langsung ke halaman login
       Get.offAllNamed(Routes.LOGIN_PAGE);
     } catch (e) {
       Get.snackbar("Registrasi Gagal", e.toString());
@@ -37,5 +39,4 @@ class RegisterPageController extends GetxController {
       isLoading.value = false;
     }
   }
-
 }

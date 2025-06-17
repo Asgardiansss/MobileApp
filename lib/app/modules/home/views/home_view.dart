@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../../constants/colors.dart';
 import '../../anxiety_page/views/anxiety_page_view.dart';
 import '../../berita/controllers/berita_controller.dart';
+import '../../detail_berita/views/detail_berita_view.dart';
 import '../../profile_page/views/profile_page_view.dart';
 import '../../stress_relief_page/views/stress_relief_page_view.dart';
 import '../../visualisasi/views/visualisasi_view.dart';
@@ -33,10 +34,14 @@ class HomeView extends GetView<HomeController> {
                         onTap: () {
                           Get.to(() => const ProfilePageView());
                         },
-                        child: const CircleAvatar(
-                          backgroundImage: AssetImage('assets/images/avatar.png'),
+                        child: Obx(() => CircleAvatar(
                           radius: 28,
-                        ),
+                          backgroundColor: Colors.grey[800],
+                          backgroundImage: controller.imageUrl.value.isNotEmpty
+                              ? NetworkImage(controller.imageUrl.value)
+                              : const AssetImage('assets/images/avatar.png') as ImageProvider,
+                        )),
+
                       ),
                       const SizedBox(width: 16),
                       Column(
@@ -78,7 +83,6 @@ class HomeView extends GetView<HomeController> {
                     ],
                   ),
                 ),
-
 
                 const SizedBox(height: 54),
 
@@ -259,7 +263,6 @@ class HomeView extends GetView<HomeController> {
                   ),
                 ),
 
-
                 const SizedBox(height: 44),
 
                 const Text('Our Latest Blogs',
@@ -286,82 +289,87 @@ class HomeView extends GetView<HomeController> {
                         final article = beritaController.articles[index];
                         final isFirst = index == 0;
 
-                        return Container(
-                          margin: EdgeInsets.only(
-                            left: isFirst ? 6 : 0,
-                            right: 16,
-                            top: 8,
-                            bottom: 8,
-                          ),
-                          width: 200,
-                          decoration: BoxDecoration(
-                            color: AppColorsDark.primary,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color(0xFF575757),
-                                offset: Offset(-2, -2),
-                                blurRadius: 4,
-                              ),
-                              BoxShadow(
-                                color: Color(0xFF000000),
-                                offset: Offset(2, 2),
-                                blurRadius: 4,
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(16),
-                                  topRight: Radius.circular(16),
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(() => DetailBeritaView(article: article));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              left: isFirst ? 6 : 0,
+                              right: 16,
+                              top: 8,
+                              bottom: 8,
+                            ),
+                            width: 200,
+                            decoration: BoxDecoration(
+                              color: AppColorsDark.primary,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0xFF575757),
+                                  offset: Offset(-2, -2),
+                                  blurRadius: 4,
                                 ),
-                                child: Image.network(
-                                  article.gambar,
-                                  height: 140,
-                                  width: 200,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Container(
-                                      height: 140,
-                                      width: 200,
-                                      color: Colors.grey,
-                                      child: const Icon(Icons.broken_image, size: 50),
-                                    );
-                                  },
+                                BoxShadow(
+                                  color: Color(0xFF000000),
+                                  offset: Offset(2, 2),
+                                  blurRadius: 4,
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      article.judul,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(16),
+                                    topRight: Radius.circular(16),
+                                  ),
+                                  child: Image.network(
+                                    article.gambar,
+                                    height: 140,
+                                    width: 200,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        height: 140,
+                                        width: 200,
+                                        color: Colors.grey,
+                                        child: const Icon(Icons.broken_image, size: 50),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        article.judul,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                        ),
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    const SizedBox(height: 12),
-                                    Text(
-                                      article.isi,
-                                      style: const TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 10,
+                                      const SizedBox(height: 12),
+                                      Text(
+                                        article.isi,
+                                        style: const TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 10,
+                                        ),
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },

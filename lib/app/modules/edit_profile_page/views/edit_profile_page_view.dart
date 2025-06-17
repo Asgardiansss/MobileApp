@@ -10,6 +10,8 @@ class EditProfilePageView extends GetView<EditProfilePageController> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<EditProfilePageController>();
+
     return Scaffold(
       backgroundColor: AppColorsDark.primary,
       appBar: AppBar(
@@ -33,6 +35,9 @@ class EditProfilePageView extends GetView<EditProfilePageController> {
           padding: const EdgeInsets.only(top: 26),
           child: Column(
             children: [
+              const SizedBox(height: 26),
+
+              // === AVATAR + BUTTONS ===
               Container(
                 width: double.infinity,
                 height: 220,
@@ -57,14 +62,30 @@ class EditProfilePageView extends GetView<EditProfilePageController> {
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
-                      const CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.white,
-                        child: CircleAvatar(
+                      Obx(() {
+                        final imageUrl = controller.imageUrl.value;
+                        if (imageUrl.isEmpty) {
+                          return const CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.white,
+                            child: Icon(Icons.person, color: Colors.grey, size: 50),
+                          );
+                        }
+                        return CircleAvatar(
                           radius: 50,
-                          backgroundImage: AssetImage('assets/images/avatar.png'),
-                        ),
-                      ),
+                          backgroundColor: Colors.white,
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundImage: NetworkImage(imageUrl),
+                            onBackgroundImageError: (_, __) {
+                              // fallback kalau gagal load dari BE
+                              controller.imageUrl.value = '';
+                            },
+                          ),
+                        );
+                      }),
+
+
                       const SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -92,7 +113,9 @@ class EditProfilePageView extends GetView<EditProfilePageController> {
                                 shadowColor: Colors.transparent,
                                 fixedSize: const Size(130, 40),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                controller.pickImageFromGallery();
+                              },
                               child: const Text(
                                 'Galeri',
                                 style: TextStyle(
@@ -126,7 +149,9 @@ class EditProfilePageView extends GetView<EditProfilePageController> {
                                 shadowColor: Colors.transparent,
                                 fixedSize: const Size(130, 40),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                controller.pickImageFromCamera();
+                              },
                               child: const Text(
                                 'Kamera',
                                 style: TextStyle(
@@ -143,7 +168,10 @@ class EditProfilePageView extends GetView<EditProfilePageController> {
                   ),
                 ),
               ),
+
               const SizedBox(height: 26),
+
+              // === FORM ===
               Container(
                 width: double.infinity,
                 height: 331,
@@ -199,15 +227,17 @@ class EditProfilePageView extends GetView<EditProfilePageController> {
                           ],
                         ),
                         child: TextField(
+                          controller: controller.usernameController,
                           decoration: InputDecoration(
-                            hintText: 'Aqnaazmy',
+                            hintText: 'Username',
                             hintStyle: GoogleFonts.dmSans(
                               color: Colors.grey[600],
                               fontSize: 12,
                               fontWeight: FontWeight.normal,
                             ),
                             border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 14),
                           ),
                           style: GoogleFonts.dmSans(
                             color: AppColorsDark.teksPrimary,
@@ -246,15 +276,17 @@ class EditProfilePageView extends GetView<EditProfilePageController> {
                           ],
                         ),
                         child: TextField(
+                          controller: controller.emailController,
                           decoration: InputDecoration(
-                            hintText: 'Aqnaazmy@gmail.com',
+                            hintText: 'Email',
                             hintStyle: GoogleFonts.dmSans(
                               color: Colors.grey[600],
                               fontSize: 12,
                               fontWeight: FontWeight.normal,
                             ),
                             border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 14),
                           ),
                           style: GoogleFonts.dmSans(
                             color: AppColorsDark.teksPrimary,
@@ -293,6 +325,8 @@ class EditProfilePageView extends GetView<EditProfilePageController> {
                           ],
                         ),
                         child: TextField(
+                          controller: controller.passwordController,
+                          obscureText: true,
                           decoration: InputDecoration(
                             hintText: '*********',
                             hintStyle: GoogleFonts.dmSans(
@@ -301,7 +335,8 @@ class EditProfilePageView extends GetView<EditProfilePageController> {
                               fontWeight: FontWeight.normal,
                             ),
                             border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 14),
                           ),
                           style: GoogleFonts.dmSans(
                             color: AppColorsDark.teksPrimary,
@@ -313,12 +348,19 @@ class EditProfilePageView extends GetView<EditProfilePageController> {
                   ),
                 ),
               ),
+
               const SizedBox(height: 26),
-              SizedBox(
+
+              // === BUTTON SIMPAN ===
+              Obx(() => SizedBox(
                 width: 380,
                 height: 55,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: controller.isLoading.value
+                      ? null
+                      : () {
+                    controller.updateProfile();
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -337,7 +379,10 @@ class EditProfilePageView extends GetView<EditProfilePageController> {
                       ],
                     ),
                     child: Center(
-                      child: Text(
+                      child: controller.isLoading.value
+                          ? const CircularProgressIndicator(
+                          color: AppColorsDark.third)
+                          : Text(
                         "Simpan Perubahan",
                         style: GoogleFonts.dmSans(
                           fontSize: 14,
@@ -348,7 +393,7 @@ class EditProfilePageView extends GetView<EditProfilePageController> {
                     ),
                   ),
                 ),
-              ),
+              )),
             ],
           ),
         ),

@@ -34,10 +34,14 @@ class HomeView extends GetView<HomeController> {
                         onTap: () {
                           Get.to(() => const ProfilePageView());
                         },
-                        child: const CircleAvatar(
-                          backgroundImage: AssetImage('assets/images/avatar.png'),
+                        child: Obx(() => CircleAvatar(
                           radius: 28,
-                        ),
+                          backgroundColor: Colors.grey[800],
+                          backgroundImage: controller.imageUrl.value.isNotEmpty
+                              ? NetworkImage(controller.imageUrl.value)
+                              : const AssetImage('assets/images/avatar.png') as ImageProvider,
+                        )),
+
                       ),
                       const SizedBox(width: 16),
                       Column(

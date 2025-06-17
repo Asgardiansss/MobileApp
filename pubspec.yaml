@@ -45,6 +45,8 @@ dependencies:
   firebase_auth: ^5.5.4
   flutter_html: ^3.0.0-beta.2
   app_links: ^6.4.0
+  shared_preferences: ^2.5.3
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

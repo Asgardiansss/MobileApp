@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/all_blogs/bindings/all_blogs_binding.dart';
+import '../modules/all_blogs/views/all_blogs_view.dart';
 import '../modules/anxiety_page/bindings/anxiety_page_binding.dart';
 import '../modules/anxiety_page/views/anxiety_page_view.dart';
 import '../modules/berita/bindings/berita_binding.dart';
@@ -92,6 +94,11 @@ class AppPages {
       name: _Paths.VISUALISASI,
       page: () => const VisualisasiView(),
       binding: VisualisasiBinding(),
+    ),
+    GetPage(
+      name: _Paths.ALL_BLOGS,
+      page: () => AllBlogsView(),
+      binding: AllBlogsBinding(),
     ),
   ];
 }

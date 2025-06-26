@@ -38,7 +38,6 @@ class LoginPageController extends GetxController {
   }
 
 
-  // Google Sign-In via Firebase, terpisah dari backend
   Future<void> signInWithGoogle() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);

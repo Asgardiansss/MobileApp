@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_app/constants/colors.dart';
 import 'package:mobile_app/app/routes/app_pages.dart';
 import '../controllers/profile_page_controller.dart';
+import 'login_history_page.dart';
 
 class ProfilePageView extends GetView<ProfilePageController> {
   const ProfilePageView({super.key});
@@ -126,52 +127,17 @@ class ProfilePageView extends GetView<ProfilePageController> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 75,
-                    right: 30,
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.EDIT_PROFILE_PAGE);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColorsDark.primary,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color(0xFF575757),
-                              offset: Offset(-1, -1),
-                              blurRadius: 2,
-                            ),
-                            BoxShadow(
-                              color: Color(0xFF000000),
-                              offset: Offset(1, 1),
-                              blurRadius: 2,
-                            ),
-                          ],
-                        ),
-                        child: Text(
-                          'Edit',
-                          style: GoogleFonts.dmSans(
-                            fontSize: 11,
-                            fontWeight: FontWeight.normal,
-                            color: AppColorsDark.teksPrimary,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
 
               const SizedBox(height: 60),
 
               // Card Grafik Bar
+              // GANTI DENGAN:
               Container(
                 width: double.infinity,
-                height: 160,
                 margin: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 decoration: BoxDecoration(
                   color: AppColorsDark.primary,
                   borderRadius: BorderRadius.circular(16),
@@ -188,103 +154,223 @@ class ProfilePageView extends GetView<ProfilePageController> {
                     ),
                   ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Lencana',
-                        style: GoogleFonts.dmSans(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColorsDark.teksPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Calories',
-                                    style: TextStyle(color: Colors.white70, fontSize: 12)),
-                                Text('160,5kcal',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                                SizedBox(height: 12),
-                                Text('Time',
-                                    style: TextStyle(color: Colors.white70, fontSize: 12)),
-                                Text('1:03:03',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: BarChart(
-                                BarChartData(
-                                  barTouchData: BarTouchData(enabled: false),
-                                  titlesData: FlTitlesData(
-                                    bottomTitles: AxisTitles(
-                                      sideTitles: SideTitles(
-                                        showTitles: true,
-                                        getTitlesWidget: (value, _) {
-                                          const days = [
-                                            'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'
-                                          ];
-                                          return Text(
-                                            days[value.toInt()],
-                                            style: const TextStyle(
-                                                color: Colors.white, fontSize: 10),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                  ),
-                                  gridData: FlGridData(show: false),
-                                  borderData: FlBorderData(show: false),
-                                  barGroups: List.generate(7, (index) {
-                                    final heights = [4.0, 5.5, 5.0, 6.0, 6.5, 4.5, 5.2];
-                                    return BarChartGroupData(
-                                      x: index,
-                                      barRods: [
-                                        BarChartRodData(
-                                          toY: heights[index],
-                                          color: Colors.greenAccent,
-                                          width: 8,
-                                          borderRadius: BorderRadius.circular(4),
-                                          backDrawRodData: BackgroundBarChartRodData(
-                                            show: true,
-                                            toY: 7,
-                                            color: Colors.white24,
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  }),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                child: Column(
+                  children: [
+                    _buildProfileButton(
+                      icon: Icons.edit,
+                      title: 'Edit Profile',
+                      onTap: () {
+                        Get.toNamed(Routes.EDIT_PROFILE_PAGE);
+                      },
+                    ),
+                    _buildProfileButton(
+                      icon: Icons.info_outline,
+                      title: 'About',
+                      onTap: () {
+                        // Tambahkan route atau dialog tentang aplikasi
+                        Get.snackbar('About', 'Yoga App versi 1.0');
+                      },
+                    ),
+                    _buildProfileButton(
+                      icon: Icons.history,
+                      title: 'Login History',
+                      onTap: () {
+                        Get.to(() => LoginHistoryPage());
+                      },
+                    ),
+                    _buildProfileButton(
+                      icon: Icons.access_time,
+                      title: 'Detect History',
+                      onTap: () {
+                        // Tambahkan route ke deteksi history
+                        Get.snackbar('Detect History', 'Fitur detect history coming soon');
+                      },
+                    ),
+                  ],
                 ),
               ),
 
               const SizedBox(height: 24),
+
+              // Tombol Logout
+              // Tambahkan di dalam Column button profile, setelah _buildProfileButton lain:
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColorsDark.primary,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0xFF575757),
+                        offset: Offset(-2, -2),
+                        blurRadius: 1,
+                      ),
+                      BoxShadow(
+                        color: Color(0xFF000000),
+                        offset: Offset(2, 2),
+                        blurRadius: 1,
+                      ),
+                    ],
+                  ),
+                  child: ListTile(
+                    leading: const Icon(Icons.logout, color: Colors.red),
+                    title: const Text(
+                      'Logout',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.redAccent),
+                    onTap: _confirmLogout,
+                  ),
+                ),
+              ),
+
+
             ],
           ),
         );
       }),
     );
   }
+
+  Widget _buildProfileButton({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14), // 🔥 Jarak antar button
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColorsDark.primary,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0xFF575757),
+              offset: Offset(-2, -2),
+              blurRadius: 1,
+            ),
+            BoxShadow(
+              color: Color(0xFF000000),
+              offset: Offset(2, 2),
+              blurRadius: 1,
+            ),
+          ],
+        ),
+        child: ListTile(
+          leading: Icon(icon, color: Colors.white),
+          title: Text(
+            title,
+            style: const TextStyle(color: Colors.white),
+          ),
+          trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white54),
+          onTap: onTap,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _confirmLogout() async {
+    final shouldLogout = await showDialog<bool>(
+      context: Get.context!,
+      builder: (context) => Dialog(
+        backgroundColor: AppColorsDark.primary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: AppColorsDark.primary,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: const [
+              BoxShadow(color: Color(0xFF575757), offset: Offset(-2, -2), blurRadius: 1),
+              BoxShadow(color: Color(0xFF000000), offset: Offset(2, 2), blurRadius: 1),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Logout",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: AppColorsDark.teksPrimary,
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                "Apakah kamu yakin ingin logout?",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppColorsDark.teksPrimary,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  InkWell(
+                    onTap: () => Navigator.of(context).pop(false),
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                      decoration: BoxDecoration(
+                        color: AppColorsDark.primary,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: const [
+                          BoxShadow(color: Color(0xFF575757), offset: Offset(-2, -2), blurRadius: 1),
+                          BoxShadow(color: Color(0xFF000000), offset: Offset(2, 2), blurRadius: 1),
+                        ],
+                      ),
+                      child: const Text(
+                        "Batal",
+                        style: TextStyle(
+                          color: AppColorsDark.teksPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () => Navigator.of(context).pop(true),
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                      decoration: BoxDecoration(
+                        color: AppColorsDark.primary,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: const [
+                          BoxShadow(color: Color(0xFF575757), offset: Offset(-2, -2), blurRadius: 1),
+                          BoxShadow(color: Color(0xFF000000), offset: Offset(2, 2), blurRadius: 1),
+                        ],
+                      ),
+                      child: const Text(
+                        "Logout",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    if (shouldLogout ?? false) {
+      await controller.authService.logout();
+      Get.offAllNamed(Routes.LOGIN_PAGE);
+    }
+  }
+
+
+
+
 }

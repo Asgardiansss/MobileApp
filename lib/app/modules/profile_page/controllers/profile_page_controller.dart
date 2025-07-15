@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../../../data/service/auth_service.dart';
 import '../../../data/service/session_service.dart';
 
 class ProfilePageController extends GetxController {
@@ -6,6 +7,8 @@ class ProfilePageController extends GetxController {
   var imageUrl = ''.obs;
   var email = ''.obs;
   var isLoading = true.obs;
+
+  final AuthService authService = AuthService();  // tambahkan ini
 
   @override
   void onInit() {

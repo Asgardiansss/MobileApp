@@ -8,6 +8,8 @@ import '../modules/berita/bindings/berita_binding.dart';
 import '../modules/berita/views/berita_view.dart';
 import '../modules/detail_stress_relief/bindings/detail_stress_relief_binding.dart';
 import '../modules/detail_stress_relief/views/detail_stress_relief_view.dart';
+import '../modules/detection/bindings/detection_binding.dart';
+import '../modules/detection/views/detection_view.dart';
 import '../modules/edit_profile_page/bindings/edit_profile_page_binding.dart';
 import '../modules/edit_profile_page/views/edit_profile_page_view.dart';
 import '../modules/get_started/bindings/get_started_binding.dart';
@@ -71,21 +73,6 @@ class AppPages {
       binding: GetStartedBinding(),
     ),
     GetPage(
-      name: _Paths.STRESS_RELIEF_PAGE,
-      page: () => const StressReliefPageView(),
-      binding: StressReliefPageBinding(),
-    ),
-    GetPage(
-      name: _Paths.DETAIL_STRESS_RELIEF,
-      page: () => const DetailStressReliefView(),
-      binding: DetailStressReliefBinding(),
-    ),
-    GetPage(
-      name: _Paths.ANXIETY_PAGE,
-      page: () => const AnxietyPageView(),
-      binding: AnxietyPageBinding(),
-    ),
-    GetPage(
       name: _Paths.BERITA,
       page: () => const BeritaView(),
       binding: BeritaBinding(),
@@ -100,5 +87,13 @@ class AppPages {
       page: () => AllBlogsView(),
       binding: AllBlogsBinding(),
     ),
+    GetPage(
+      name: _Paths.DETECTION,
+      page: () => const DetectionView(),
+      binding: DetectionBinding(),
+    ),
+
+    //view
+
   ];
 }

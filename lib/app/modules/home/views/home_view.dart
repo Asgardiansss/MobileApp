@@ -5,6 +5,10 @@ import '../../all_blogs/views/all_blogs_view.dart';
 import '../../anxiety_page/views/anxiety_page_view.dart';
 import '../../berita/controllers/berita_controller.dart';
 import '../../detail_berita/views/detail_berita_view.dart';
+import '../../detection/views/anxiety_view.dart';
+import '../../detection/views/calm_view.dart';
+import '../../detection/views/depression_view.dart';
+import '../../detection/views/stres_view.dart';
 import '../../profile_page/views/profile_page_view.dart';
 import '../../stress_relief_page/views/stress_relief_page_view.dart';
 import '../../visualisasi/views/visualisasi_view.dart';
@@ -107,25 +111,24 @@ class HomeView extends GetView<HomeController> {
                         case 0:
                           categoryName = 'Stress Relief';
                           imagePath = 'assets/icons/category_1.png';
-                          onTap = () => Get.to(() => const StressReliefPageView());
+                          onTap = () => Get.to(() => const StresView());
                           break;
                         case 1:
                           categoryName = 'Anxiety';
                           imagePath = 'assets/icons/category_2.png';
-                          onTap = () => Get.to(() => const AnxietyPageView());
+                          onTap = () => Get.to(() => const AnxietyView());
                           break;
                         case 2:
                           categoryName = 'Calm';
                           imagePath = 'assets/icons/category_3.png';
-                          onTap = () => Get.to(() => const StressReliefPageView());
+                          onTap = () => Get.to(() => const CalmView());
                           break;
                         case 3:
                           categoryName = 'Depression';
                           imagePath = 'assets/icons/category_4.png';
-                          onTap = () => Get.to(() => const AnxietyPageView());
+                          onTap = () => Get.to(() => const DepressionView());
                           break;
                       }
-
                       return Padding(
                         padding: const EdgeInsets.only(right: 12),
                         child: GestureDetector(

@@ -1,0 +1,4 @@
+Child_s Pose
+Corpse Pose
+Easy Pose
+Head-to-Knee Pose

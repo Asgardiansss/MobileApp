@@ -16,6 +16,7 @@ abstract class Routes {
   static const BERITA = _Paths.BERITA;
   static const VISUALISASI = _Paths.VISUALISASI;
   static const ALL_BLOGS = _Paths.ALL_BLOGS;
+  static const DETECTION = _Paths.DETECTION;
 }
 
 abstract class _Paths {
@@ -33,4 +34,7 @@ abstract class _Paths {
   static const BERITA = '/berita';
   static const VISUALISASI = '/visualisasi';
   static const ALL_BLOGS = '/all-blogs';
+  static const DETECTION = '/detection';
+
+
 }

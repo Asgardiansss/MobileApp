@@ -69,7 +69,7 @@ class HomeView extends GetView<HomeController> {
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => const VisualisasiView());
+                          Get.toNamed('/visualisasi');
                         },
                         child: Container(
                           width: 40,

@@ -28,6 +28,8 @@ import '../modules/stress_relief_page/bindings/stress_relief_page_binding.dart';
 import '../modules/stress_relief_page/views/stress_relief_page_view.dart';
 import '../modules/visualisasi/bindings/visualisasi_binding.dart';
 import '../modules/visualisasi/views/visualisasi_view.dart';
+import '../modules/visualisasi_deteksi/bindings/visualisasi_deteksi_binding.dart';
+import '../modules/visualisasi_deteksi/views/visualisasi_deteksi_view.dart';
 
 part 'app_routes.dart';
 
@@ -79,7 +81,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.VISUALISASI,
-      page: () => const VisualisasiView(),
+      page: () => VisualisasiView(),
       binding: VisualisasiBinding(),
     ),
     GetPage(
@@ -94,6 +96,10 @@ class AppPages {
     ),
 
     //view
-
+    GetPage(
+      name: _Paths.VISUALISASI_DETEKSI,
+      page: () => const VisualisasiDeteksiView(),
+      binding: VisualisasiDeteksiBinding(),
+    ),
   ];
 }

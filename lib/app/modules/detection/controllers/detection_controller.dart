@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 class DetectionController extends GetxController {
@@ -206,6 +207,10 @@ class DetectionController extends GetxController {
             debugPrint("Expected: $expected");
 
             predictedLabel.value = result == expected ? 'Benar' : 'Salah';
+
+            // Hanya simpan hasil deteksi jika belum ada sebelumnya
+            saveDetectionResult(result);
+
             sequenceBuffer.removeAt(0);
           }
         }
@@ -219,6 +224,35 @@ class DetectionController extends GetxController {
       isDetecting = false;
     }
   }
+
+
+// Tambahkan method untuk simpan hasil prediksi ke SharedPreferences
+  Future<void> saveDetectionResult(String result) async {
+    final prefs = await SharedPreferences.getInstance();
+    // Ambil list lama (jika ada)
+    final List<String> oldList = prefs.getStringList('detection_results') ?? [];
+
+    // Cek apakah result sudah ada dalam list atau belum
+    if (!oldList.contains(result)) {
+      // Tambah hasil deteksi baru
+      oldList.add(result);
+      // Simpan ulang
+      await prefs.setStringList('detection_results', oldList);
+      debugPrint("✅ Deteksi '$result' berhasil disimpan.");
+    } else {
+      debugPrint("❌ Deteksi '$result' sudah ada sebelumnya.");
+    }
+  }
+
+
+// Panggil method ini setiap update predictedLabel
+  void updatePredictedLabel(String label) {
+    predictedLabel.value = label;
+    saveDetectionResult(label);
+  }
+
+
+
 }
 
 class MovementConfig {

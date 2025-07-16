@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_app/constants/colors.dart';
 import 'package:mobile_app/app/routes/app_pages.dart';
+import '../../visualisasi_deteksi/controllers/visualisasi_deteksi_controller.dart';
+import '../../visualisasi_deteksi/views/visualisasi_deteksi_view.dart';
 import '../controllers/profile_page_controller.dart';
 import 'login_history_page.dart';
 
@@ -182,10 +184,10 @@ class ProfilePageView extends GetView<ProfilePageController> {
                       icon: Icons.access_time,
                       title: 'Detect History',
                       onTap: () {
-                        // Tambahkan route ke deteksi history
-                        Get.snackbar('Detect History', 'Fitur detect history coming soon');
+                        Get.put(VisualisasiDeteksiController()); // Register controller secara manual
+                        Get.to(() => const VisualisasiDeteksiView());
                       },
-                    ),
+                    )
                   ],
                 ),
               ),

@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-import '../../../../constants/colors.dart';
 import '../controllers/visualisasi_controller.dart';
 
+// Ganti ini dengan path yang sesuai di projekmu
+import '../../../../constants/colors.dart';
+
 class VisualisasiView extends GetView<VisualisasiController> {
-  const VisualisasiView({super.key});
+  const VisualisasiView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<VisualisasiController>();
+
     return Scaffold(
       backgroundColor: AppColorsDark.primary,
       appBar: AppBar(
@@ -26,9 +30,9 @@ class VisualisasiView extends GetView<VisualisasiController> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // === Container untuk Column Chart ===
+              // === Container untuk Top Words Bar Chart ===
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Container(
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
@@ -47,25 +51,110 @@ class VisualisasiView extends GetView<VisualisasiController> {
                       ),
                     ],
                   ),
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
+                      const Center(
                         child: Text(
-                          'Progress Latihan Mingguan',
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                          'Tren Kata Terbanyak (Top 20)',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
-                      SizedBox(height: 12),
-                      SizedBox(height: 170, child: ProgressBarChart()),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 170,
+                        child: Obx(() {
+                          if (controller.topWords.isEmpty) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+
+                          final barGroups = controller.topWords
+                              .asMap()
+                              .entries
+                              .map((entry) {
+                            final index = entry.key;
+                            final word = entry.value.key;
+                            final freq = entry.value.value.toDouble();
+
+                            return BarChartGroupData(
+                              x: index,
+                              barsSpace: 6,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: freq,
+                                  color: Colors.blueAccent,
+                                  width: 18,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                              ],
+                            );
+                          }).toList();
+
+                          return BarChart(
+                            BarChartData(
+                              maxY:
+                              controller.topWords.first.value.toDouble() * 1.2,
+                              barGroups: barGroups,
+                              alignment: BarChartAlignment.spaceBetween,
+                              gridData: FlGridData(show: false),
+                              borderData: FlBorderData(show: false),
+                              titlesData: FlTitlesData(
+                                bottomTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    getTitlesWidget: (value, meta) {
+                                      if (value.toInt() < 0 ||
+                                          value.toInt() >=
+                                              controller.topWords.length)
+                                        return const SizedBox();
+                                      final word =
+                                          controller.topWords[value.toInt()].key;
+                                      return SideTitleWidget(
+                                        axisSide: meta.axisSide,
+                                        child: RotatedBox(
+                                          quarterTurns: 3,
+                                          child: Text(word,
+                                              style: const TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white)),
+                                        ),
+                                      );
+                                    },
+                                    reservedSize: 60,
+                                  ),
+                                ),
+                                leftTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 40,
+                                    getTitlesWidget: (value, meta) {
+                                      return Text(value.toInt().toString(),
+                                          style:
+                                          const TextStyle(color: Colors.white));
+                                    },
+                                  ),
+                                ),
+                                rightTitles: AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false)),
+                                topTitles: AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false)),
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
                     ],
                   ),
                 ),
               ),
 
-              // === Container untuk Pie Chart ===
+              // === Container untuk Sumber Counts Bar Chart ===
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Container(
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
@@ -84,91 +173,104 @@ class VisualisasiView extends GetView<VisualisasiController> {
                       ),
                     ],
                   ),
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
+                      const Center(
                         child: Text(
-                          'Distribusi Pose Yoga',
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                          'Jumlah Artikel per Sumber',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
-                      SizedBox(height: 12),
-                      SizedBox(height: 170, child: PosePieChart()),
-                    ],
-                  ),
-                ),
-              ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 170,
+                        child: Obx(() {
+                          if (controller.sumberCounts.isEmpty) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
 
-              // === Container untuk Line Chart ===
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                child: Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: AppColorsDark.primary,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0xFF575757),
-                        offset: Offset(-2, -2),
-                        blurRadius: 4,
-                      ),
-                      BoxShadow(
-                        color: Color(0xFF000000),
-                        offset: Offset(2, 2),
-                        blurRadius: 4,
-                      ),
-                    ],
-                  ),
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Text(
-                          'Kalori Terbakar Harian',
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(height: 12),
-                      SizedBox(height: 170, child: CaloriesLineChart()),
-                    ],
-                  ),
-                ),
-              ),
+                          final barGroups = controller.sumberCounts
+                              .asMap()
+                              .entries
+                              .map((entry) {
+                            final index = entry.key;
+                            final sumber = entry.value.key;
+                            final jumlah = entry.value.value.toDouble();
 
-              // === Container untuk Bar Chart (Sesi Latihan) ===
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                child: Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: AppColorsDark.primary,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0xFF575757),
-                        offset: Offset(-2, -2),
-                        blurRadius: 4,
+                            return BarChartGroupData(
+                              x: index,
+                              barsSpace: 6,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: jumlah,
+                                  color: Colors.deepOrange,
+                                  width: 18,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                              ],
+                            );
+                          }).toList();
+
+                          return BarChart(
+                            BarChartData(
+                              maxY: (controller.sumberCounts.first.value
+                                  .toDouble() *
+                                  1.2),
+                              barGroups: barGroups,
+                              alignment: BarChartAlignment.spaceAround,
+                              gridData: FlGridData(show: false),
+                              borderData: FlBorderData(show: false),
+                              titlesData: FlTitlesData(
+                                bottomTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    getTitlesWidget: (value, meta) {
+                                      if (value.toInt() < 0 ||
+                                          value.toInt() >=
+                                              controller.sumberCounts.length)
+                                        return const SizedBox();
+                                      final sumber = controller
+                                          .sumberCounts[value.toInt()].key;
+                                      return SideTitleWidget(
+                                        axisSide: meta.axisSide,
+                                        child: RotatedBox(
+                                          quarterTurns: 3,
+                                          child: Text(
+                                            sumber,
+                                            style: const TextStyle(
+                                                fontSize: 12, color: Colors.white),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    reservedSize: 80,
+                                  ),
+                                ),
+                                leftTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 40,
+                                    getTitlesWidget: (value, meta) {
+                                      return Text(value.toInt().toString(),
+                                          style:
+                                          const TextStyle(color: Colors.white));
+                                    },
+                                  ),
+                                ),
+                                rightTitles: AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false)),
+                                topTitles: AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false)),
+                              ),
+                            ),
+                          );
+                        }),
                       ),
-                      BoxShadow(
-                        color: Color(0xFF000000),
-                        offset: Offset(2, 2),
-                        blurRadius: 4,
-                      ),
-                    ],
-                  ),
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Text(
-                          'Jumlah Sesi Latihan Mingguan',
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(height: 12),
-                      SizedBox(height: 170, child: SessionsBarChart()),
                     ],
                   ),
                 ),
@@ -178,185 +280,5 @@ class VisualisasiView extends GetView<VisualisasiController> {
         ),
       ),
     );
-  }
-}
-
-// === Column Chart: Progress Latihan Mingguan ===
-class ProgressBarChart extends StatelessWidget {
-  const ProgressBarChart({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BarChart(
-      BarChartData(
-        barGroups: [
-          _barGroup(0, 20),
-          _barGroup(1, 15),
-          _barGroup(2, 25),
-          _barGroup(3, 10),
-          _barGroup(4, 30),
-          _barGroup(5, 0),
-          _barGroup(6, 40),
-        ],
-        titlesData: FlTitlesData(
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 30,
-              getTitlesWidget: (value, meta) {
-                return Text(
-                  value.toInt().toString(),
-                  style: const TextStyle(color: Colors.white, fontSize: 12),
-                );
-              },
-            ),
-          ),
-          rightTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-          ),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              getTitlesWidget: (value, _) {
-                const days = ['S', 'S', 'R', 'K', 'J', 'S', 'M'];
-                return Text(days[value.toInt()], style: const TextStyle(color: Colors.white));
-              },
-            ),
-          ),
-        ),
-        borderData: FlBorderData(show: false),
-        gridData: FlGridData(show: false),
-      ),
-    );
-  }
-
-  BarChartGroupData _barGroup(int x, double y) {
-    return BarChartGroupData(x: x, barRods: [
-      BarChartRodData(
-        toY: y,
-        color: Colors.lightBlueAccent,
-        width: 18,
-        borderRadius: BorderRadius.circular(4),
-      ),
-    ]);
-  }
-}
-
-// === Pie Chart: Distribusi Pose Yoga ===
-class PosePieChart extends StatelessWidget {
-  const PosePieChart({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return PieChart(
-      PieChartData(
-        sections: [
-          PieChartSectionData(value: 40, title: 'Warrior\n40%', color: Colors.indigo, radius: 60),
-          PieChartSectionData(value: 30, title: 'Tree\n30%', color: Colors.indigoAccent, radius: 60),
-          PieChartSectionData(value: 30, title: 'Cobra\n30%', color: Colors.blue, radius: 60),
-        ],
-        sectionsSpace: 4,
-        centerSpaceRadius: 30,
-      ),
-    );
-  }
-}
-
-// === Line Chart: Kalori Terbakar Harian ===
-class CaloriesLineChart extends StatelessWidget {
-  const CaloriesLineChart({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return LineChart(
-      LineChartData(
-        lineBarsData: [
-          LineChartBarData(
-            spots: [
-              FlSpot(0, 50),
-              FlSpot(1, 80),
-              FlSpot(2, 65),
-              FlSpot(3, 90),
-              FlSpot(4, 70),
-              FlSpot(5, 100),
-              FlSpot(6, 85),
-            ],
-            isCurved: true,
-            color: Colors.orangeAccent,
-            barWidth: 4,
-            dotData: FlDotData(show: true),
-            belowBarData: BarAreaData(show: false),
-          ),
-        ],
-        titlesData: FlTitlesData(
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 30,
-              getTitlesWidget: (value, meta) {
-                return Text(value.toInt().toString(), style: const TextStyle(color: Colors.white));
-              },
-            ),
-          ),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-          ),
-        ),
-        borderData: FlBorderData(show: false),
-        gridData: FlGridData(show: false),
-      ),
-    );
-  }
-}
-
-// === Bar Chart: Jumlah Sesi Latihan Mingguan ===
-class SessionsBarChart extends StatelessWidget {
-  const SessionsBarChart({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BarChart(
-      BarChartData(
-        barGroups: [
-          _barGroup(0, 3),
-          _barGroup(1, 4),
-          _barGroup(2, 2),
-          _barGroup(3, 5),
-          _barGroup(4, 3),
-          _barGroup(5, 0),
-          _barGroup(6, 6),
-        ],
-        titlesData: FlTitlesData(
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 30,
-              getTitlesWidget: (value, meta) {
-                return Text(value.toInt().toString(), style: const TextStyle(color: Colors.white));
-              },
-            ),
-          ),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-          ),
-        ),
-        borderData: FlBorderData(show: false),
-        gridData: FlGridData(show: false),
-      ),
-    );
-  }
-
-  BarChartGroupData _barGroup(int x, double y) {
-    return BarChartGroupData(x: x, barRods: [
-      BarChartRodData(
-        toY: y,
-        color: Colors.greenAccent,
-        width: 18,
-        borderRadius: BorderRadius.circular(4),
-      ),
-    ]);
   }
 }

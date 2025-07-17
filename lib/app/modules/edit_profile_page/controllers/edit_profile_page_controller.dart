@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -12,8 +13,10 @@ import '../../profile_page/controllers/profile_page_controller.dart';
 class EditProfilePageController extends GetxController {
   final _authService = AuthService();
   final _storage = FlutterSecureStorage();
-  final imageUrl = ''.obs;
   final ImagePicker _picker = ImagePicker();
+
+  final imageUrl = ''.obs;
+  final imagePath = ''.obs;
 
   late TextEditingController usernameController;
   late TextEditingController emailController;
@@ -26,7 +29,6 @@ class EditProfilePageController extends GetxController {
     usernameController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
-
     _loadUserData();
   }
 
@@ -36,33 +38,37 @@ class EditProfilePageController extends GetxController {
       if (user != null) {
         usernameController.text = user.username;
         emailController.text = user.email;
-        imageUrl.value = user.image ?? ''; // set initial image URL
+        imageUrl.value = user.image ?? '';
+        print("📥 Loaded user data: ${user.toJson()}");
       }
     } catch (e) {
+      print("❌ Gagal load user data: $e");
       Get.snackbar('Error', 'Gagal memuat data pengguna');
     }
   }
 
-  // Method untuk memilih gambar dari gallery
   Future<void> pickImageFromGallery() async {
     try {
       final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
-        imageUrl.value = pickedFile.path;
+        imagePath.value = pickedFile.path;
+        print("📸 Gambar dipilih dari galeri: ${pickedFile.path}");
       }
     } catch (e) {
+      print("❌ Gagal pilih gambar dari galeri: $e");
       Get.snackbar('Error', 'Gagal memilih gambar dari galeri');
     }
   }
 
-  // Method untuk mengambil gambar dari kamera
   Future<void> pickImageFromCamera() async {
     try {
       final XFile? pickedFile = await _picker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
-        imageUrl.value = pickedFile.path;
+        imagePath.value = pickedFile.path;
+        print("📷 Gambar diambil dari kamera: ${pickedFile.path}");
       }
     } catch (e) {
+      print("❌ Gagal ambil gambar dari kamera: $e");
       Get.snackbar('Error', 'Gagal mengambil gambar dari kamera');
     }
   }
@@ -80,12 +86,14 @@ class EditProfilePageController extends GetxController {
     isLoading.value = true;
 
     try {
-      print('imageUrl saat update: ${imageUrl.value}');
+      print("⏳ Update profile mulai...");
+      print("username: ${usernameController.text}");
+      print("email: ${emailController.text}");
+      print("password: ${passwordController.text}");
+      print("📤 imagePath (local): ${imagePath.value}");
+      print("🌐 imageUrl (current): ${imageUrl.value}");
 
-      final isImageUrlAValidUrl = Uri.tryParse(imageUrl.value)?.hasScheme == true &&
-          (imageUrl.value.startsWith('http://') || imageUrl.value.startsWith('https://'));
-
-      final imagePathToUpload = isImageUrlAValidUrl ? null : imageUrl.value;
+      final imagePathToUpload = imagePath.value.isNotEmpty ? imagePath.value : null;
 
       final response = await _authService.updateProfile(
         username: usernameController.text.trim(),
@@ -95,11 +103,13 @@ class EditProfilePageController extends GetxController {
       );
 
       final updatedUser = response['user'];
+      print('🎯 Updated image from backend: ${updatedUser['image']}');
 
       if (updatedUser != null) {
         usernameController.text = updatedUser['username'] ?? usernameController.text;
         emailController.text = updatedUser['email'] ?? emailController.text;
         imageUrl.value = updatedUser['image'] ?? imageUrl.value;
+        imagePath.value = ''; // Clear path setelah upload
       }
 
       await _storage.write(key: 'username', value: usernameController.text.trim());
@@ -180,8 +190,8 @@ class EditProfilePageController extends GetxController {
         ),
       );
     } catch (e, st) {
-      print('Error saat update profile: $e');
-      print(st);
+      print('❌ Error saat update profile: $e');
+      print('🪵 Stacktrace: $st');
       Get.snackbar(
         "Gagal",
         "Terjadi kesalahan saat menyimpan data.",
